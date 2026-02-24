@@ -5,12 +5,13 @@ import {
 	WORKSPACES_ID,
 } from '@/config/env';
 import { MemberRole } from '@/features/members/types';
+import { getMember } from '@/features/members/utils';
 import { sessionMiddleware } from '@/lib/sesssion-middleware';
 import { generateInviteCode } from '@/lib/utils';
 import { zValidator } from '@hono/zod-validator';
 import { Hono } from 'hono';
 import { ID, Query } from 'node-appwrite';
-import { createWorkspaceSchema } from '../schemas';
+import { createWorkspaceSchema, editWorkspaceSchema } from '../schemas';
 
 const app = new Hono()
 	.get('/', sessionMiddleware, async (c) => {
@@ -88,6 +89,60 @@ const app = new Hono()
 					workspaceId: workspace.$id,
 					userId: user.$id,
 					role: MemberRole.ADMIN,
+				},
+			});
+
+			return c.json({ data: workspace });
+		},
+	)
+	.patch(
+		'/:workspaceId',
+		sessionMiddleware,
+		zValidator('form', editWorkspaceSchema),
+		async (c) => {
+			const tablesDB = c.get('tablesDB');
+			const user = c.get('user');
+			const storage = c.get('storage');
+
+			const { workspaceId } = c.req.param();
+			const { name, image } = c.req.valid('form');
+
+			const member = await getMember({
+				tablesDB,
+				userId: user.$id,
+				workspaceId,
+			});
+
+			if (!member || member.role !== MemberRole.ADMIN) {
+				return c.json({ error: 'Unauthorized' }, 401);
+			}
+
+			let uploadedImageUrl: string | undefined;
+
+			if (image instanceof File) {
+				const file = await storage.createFile({
+					bucketId: IMAGES_BUCKET_ID,
+					fileId: ID.unique(),
+					file: image,
+				});
+
+				const arraybuffer = await storage.getFilePreview({
+					bucketId: IMAGES_BUCKET_ID,
+					fileId: file.$id,
+				});
+
+				uploadedImageUrl = `data:image/png;base64,${Buffer.from(arraybuffer).toString('base64')}`;
+			} else {
+				uploadedImageUrl = image;
+			}
+
+			const workspace = await tablesDB.updateRow({
+				databaseId: DATABASE_ID,
+				tableId: WORKSPACES_ID,
+				rowId: workspaceId,
+				data: {
+					name,
+					imageUrl: uploadedImageUrl,
 				},
 			});
 
