@@ -133,7 +133,7 @@ const app = new Hono()
 
 				uploadedImageUrl = `data:image/png;base64,${Buffer.from(arraybuffer).toString('base64')}`;
 			} else {
-				uploadedImageUrl = image;
+				uploadedImageUrl = image ?? undefined;
 			}
 
 			const workspace = await tablesDB.updateRow({
@@ -142,7 +142,7 @@ const app = new Hono()
 				rowId: workspaceId,
 				data: {
 					name,
-					imageUrl: uploadedImageUrl,
+					imageUrl: uploadedImageUrl ?? null,
 				},
 			});
 

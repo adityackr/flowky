@@ -49,7 +49,7 @@ export const EditWorkspaceForm: FC<EditWorkspaceFormProps> = ({
 	const handleSubmit = (data: EditWorkspaceSchema) => {
 		const finalData = {
 			...data,
-			image: data.image instanceof File ? data.image : '',
+			image: data.image instanceof File ? data.image : (data.image ?? ''),
 		};
 
 		mutate(
@@ -168,7 +168,7 @@ export const EditWorkspaceForm: FC<EditWorkspaceFormProps> = ({
 														variant="destructive"
 														size="xs"
 														onClick={() => {
-															field.onChange(null);
+															field.onChange('');
 															if (inputRef.current) {
 																inputRef.current.value = '';
 															}
