@@ -22,13 +22,15 @@ import { Input } from '@/components/ui/input';
 import { useConfirm } from '@/hooks/use-confirm';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ArrowLeftIcon, ImageIcon } from 'lucide-react';
+import { ArrowLeftIcon, CopyIcon, ImageIcon } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { ChangeEvent, FC, useRef } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { useDeleteWorkspace } from '../api/use-delete-workspaces';
 import { useEditWorkspace } from '../api/use-edit-workspace';
+import { useResetInviteCode } from '../api/use-reset-invite-code';
 import { editWorkspaceSchema, EditWorkspaceSchema } from '../schemas';
 import type { Workspace } from '../types';
 
@@ -45,10 +47,18 @@ export const EditWorkspaceForm: FC<EditWorkspaceFormProps> = ({
 	const { mutate, isPending } = useEditWorkspace();
 	const { mutate: deleteWorkspace, isPending: isWorkspaceDeleting } =
 		useDeleteWorkspace();
+	const { mutate: resetInviteCode, isPending: isInviteCodeResetting } =
+		useResetInviteCode();
 
 	const [DeleteDialog, confirmDelete] = useConfirm(
 		'Delete workspace',
 		'Are you sure you want to delete this workspace?',
+		'destructive',
+	);
+
+	const [ResetInviteCodeDialog, confirmResetInviteCode] = useConfirm(
+		'Reset invite code',
+		'This will generate a new invite code and invalidate the old one. Any users who have not yet joined the workspace will need to use the new code to join.',
 		'destructive',
 	);
 
@@ -71,6 +81,20 @@ export const EditWorkspaceForm: FC<EditWorkspaceFormProps> = ({
 			{
 				onSuccess: () => {
 					router.push('/');
+				},
+			},
+		);
+	};
+
+	const handleResetInviteCode = async () => {
+		const ok = await confirmResetInviteCode();
+		if (!ok) return;
+
+		resetInviteCode(
+			{ param: { workspaceId: initialValues.$id } },
+			{
+				onSuccess: () => {
+					router.refresh();
 				},
 			},
 		);
@@ -100,9 +124,18 @@ export const EditWorkspaceForm: FC<EditWorkspaceFormProps> = ({
 		}
 	};
 
+	const fullInviteLink = `${window.location.origin}/workspaces/${initialValues.$id}/join/${initialValues.inviteCode}`;
+
+	const handleCopyInviteLink = () => {
+		navigator.clipboard.writeText(fullInviteLink).then(() => {
+			toast.success('Invite link copied to clipboard');
+		});
+	};
+
 	return (
 		<div className="flex flex-col gap-y-4">
 			<DeleteDialog />
+			<ResetInviteCodeDialog />
 			<Card className="w-full h-full border-none shadow-none">
 				<CardHeader className="flex flex-row items-center gap-x-4 space-y-0 px-4">
 					<Button
@@ -237,6 +270,43 @@ export const EditWorkspaceForm: FC<EditWorkspaceFormProps> = ({
 					</Form>
 				</CardContent>
 			</Card>
+
+			<Card className="w-full h-full border-none shadow-none">
+				<CardHeader>
+					<CardTitle>Invite Members</CardTitle>
+					<CardDescription>
+						Share this link with your team members to invite them to the
+						workspace
+					</CardDescription>
+				</CardHeader>
+				<CardContent>
+					<div className="flex items-center gap-x-2">
+						<Input value={fullInviteLink} disabled />
+						<Button
+							type="button"
+							className="size-12"
+							variant="secondary"
+							disabled={isPending || isWorkspaceDeleting}
+							onClick={handleCopyInviteLink}
+						>
+							<CopyIcon className="size-5" />
+						</Button>
+					</div>
+					<DottedSeparator className="py-6" />
+					<div className="flex items-center justify-end">
+						<Button
+							type="button"
+							size={'sm'}
+							variant="destructive"
+							disabled={isPending || isInviteCodeResetting}
+							onClick={handleResetInviteCode}
+						>
+							Reset Invite Code
+						</Button>
+					</div>
+				</CardContent>
+			</Card>
+
 			<Card className="w-full h-full border-none shadow-none">
 				<CardHeader>
 					<CardTitle>Danger Zone</CardTitle>
@@ -244,6 +314,7 @@ export const EditWorkspaceForm: FC<EditWorkspaceFormProps> = ({
 						Deleting your workspace will permanently remove all of your data.
 					</CardDescription>
 				</CardHeader>
+				<DottedSeparator className="px-6" />
 				<CardContent className="flex items-center justify-end">
 					<Button
 						type="button"
