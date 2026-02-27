@@ -2,7 +2,7 @@ import 'server-only';
 
 import { AUTH_COOKIE } from '@/features/auth/constants';
 import { cookies } from 'next/headers';
-import { Account, Client, TablesDB } from 'node-appwrite';
+import { Account, Client, TablesDB, Users } from 'node-appwrite';
 
 export const createSessionClient = async () => {
 	const client = new Client()
@@ -27,7 +27,7 @@ export const createSessionClient = async () => {
 	};
 };
 
-export const createAdminClient = () => {
+export const createAdminClient = async () => {
 	const client = new Client()
 		.setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
 		.setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT!)
@@ -36,6 +36,9 @@ export const createAdminClient = () => {
 	return {
 		get account() {
 			return new Account(client);
+		},
+		get users() {
+			return new Users(client);
 		},
 	};
 };
