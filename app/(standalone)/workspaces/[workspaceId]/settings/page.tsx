@@ -15,8 +15,6 @@ const SettingsPage = async ({ params }: SettingsPageProps) => {
 
 	const workspace = await getWorkspace({ workspaceId });
 
-	if (!workspace) redirect(`/workspaces/${workspaceId}`);
-
 	// Appwrite SDK returns class instances — serialize to a plain object
 	// so it can be safely passed to Client Components across the RSC boundary.
 	const initialValues = JSON.parse(JSON.stringify(workspace));

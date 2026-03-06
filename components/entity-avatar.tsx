@@ -3,16 +3,18 @@ import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { FC } from 'react';
 
-type WorkspaceAvatarProps = {
+type EntityAvatarProps = {
 	image?: string;
 	name: string;
 	className?: string;
+	fallbackClassName?: string;
 };
 
-export const WorkspaceAvatar: FC<WorkspaceAvatarProps> = ({
+export const EntityAvatar: FC<EntityAvatarProps> = ({
 	image,
 	name,
 	className,
+	fallbackClassName,
 }) => {
 	if (image) {
 		return (
@@ -26,7 +28,12 @@ export const WorkspaceAvatar: FC<WorkspaceAvatarProps> = ({
 
 	return (
 		<Avatar className={cn('size-10 rounded-md', className)}>
-			<AvatarFallback className="text-white bg-blue-600 font-semibold text-lg uppercase rounded-md">
+			<AvatarFallback
+				className={cn(
+					'text-white bg-blue-600 font-semibold text-lg uppercase rounded-md',
+					fallbackClassName,
+				)}
+			>
 				{name.charAt(0)}
 			</AvatarFallback>
 		</Avatar>

@@ -1,6 +1,7 @@
 'use client';
 
 import { DottedSeparator } from '@/components/dotted-separator';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -14,6 +15,7 @@ import { useWorkspaceId } from '@/features/workspaces/hooks/use-workspace-id';
 import { useConfirm } from '@/hooks/use-confirm';
 import { ArrowLeftIcon, MoreVerticalIcon } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Fragment } from 'react/jsx-runtime';
 import { useDeleteMember } from '../api/use-delete-member';
 import { useGetMembers } from '../api/use-get-members';
@@ -22,6 +24,7 @@ import { MemberRole } from '../types';
 import { MemberAvatar } from './member-avatar';
 
 export const MembersList = () => {
+	const router = useRouter();
 	const workspaceId = useWorkspaceId();
 	const [ConfirmDialog, confirm] = useConfirm(
 		'Remove Member',
@@ -46,11 +49,15 @@ export const MembersList = () => {
 			{ param: { memberId } },
 			{
 				onSuccess: () => {
-					window.location.reload();
+					router.refresh();
 				},
 			},
 		);
 	};
+
+	if (members?.rows.length === 0) {
+		router.replace('/');
+	}
 
 	return (
 		<Card className="border-none shadow-none">
@@ -78,7 +85,14 @@ export const MembersList = () => {
 							/>
 
 							<div className="flex flex-col">
-								<p className="text-sm font-medium">{member.name}</p>
+								<div className="flex items-center gap-x-2">
+									<p className="text-sm font-medium">{member.name}</p>
+									{member.role === MemberRole.ADMIN && (
+										<Badge variant={'outline'} className="text-xs">
+											Admin
+										</Badge>
+									)}
+								</div>
 								<p className="text-xs text-muted-foreground">{member.email}</p>
 							</div>
 

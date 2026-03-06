@@ -1,11 +1,11 @@
 'use client';
 
 import { useGetWorkspaces } from '@/features/workspaces/api/use-get-workspaces';
-import { WorkspaceAvatar } from '@/features/workspaces/components/workspace-avatar';
 import { useCreateWorkspaceModal } from '@/features/workspaces/hooks/use-create-workspace-modal';
 import { useWorkspaceId } from '@/features/workspaces/hooks/use-workspace-id';
 import { useRouter } from 'next/navigation';
 import { RiAddCircleFill } from 'react-icons/ri';
+import { EntityAvatar } from './entity-avatar';
 import {
 	Select,
 	SelectContent,
@@ -41,7 +41,7 @@ export const WorkspaceSwitcher = () => {
 					{workspaces?.rows.map((workspace) => (
 						<SelectItem value={workspace.$id} key={workspace.$id}>
 							<div className="flex justify-start items-center gap-3 font-medium">
-								<WorkspaceAvatar
+								<EntityAvatar
 									image={workspace.imageUrl}
 									name={workspace.name}
 								/>
