@@ -1,8 +1,8 @@
 'use client';
 
 import { useGetWorkspaces } from '@/features/workspaces/api/use-get-workspaces';
-import { useCreateWorkspaceModal } from '@/features/workspaces/hooks/use-create-workspace-modal';
 import { useWorkspaceId } from '@/features/workspaces/hooks/use-workspace-id';
+import { useModalState } from '@/hooks/use-modal-state';
 import { useRouter } from 'next/navigation';
 import { RiAddCircleFill } from 'react-icons/ri';
 import { EntityAvatar } from './entity-avatar';
@@ -18,7 +18,7 @@ export const WorkspaceSwitcher = () => {
 	const workspaceId = useWorkspaceId();
 	const router = useRouter();
 	const { data: workspaces } = useGetWorkspaces();
-	const { open } = useCreateWorkspaceModal();
+	const { open } = useModalState('create-workspace');
 
 	const onSelectWorkspace = (id: string) => {
 		router.push(`/workspaces/${id}`);

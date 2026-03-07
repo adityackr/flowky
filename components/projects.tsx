@@ -1,8 +1,8 @@
 'use client';
 
 import { useGetProjects } from '@/features/projects/api/use-get-projects';
-import { useCreateProjectModal } from '@/features/projects/hooks/use-create-project-modal';
 import { useWorkspaceId } from '@/features/workspaces/hooks/use-workspace-id';
+import { useModalState } from '@/hooks/use-modal-state';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -11,7 +11,7 @@ import { EntityAvatar } from './entity-avatar';
 
 export const Projects = () => {
 	const workspaceId = useWorkspaceId();
-	const { open } = useCreateProjectModal();
+	const { open } = useModalState('create-project');
 	const pathname = usePathname();
 	const { data: projects } = useGetProjects({
 		workspaceId,
