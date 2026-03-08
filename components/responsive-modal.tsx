@@ -1,6 +1,7 @@
+import { VisuallyHidden } from 'radix-ui';
 import { FC, ReactNode } from 'react';
 import { useMedia } from 'react-use';
-import { Dialog, DialogContent } from './ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
 import { Drawer, DrawerContent } from './ui/drawer';
 
 type ResponsiveModalProps = {
@@ -19,6 +20,13 @@ export const ResponsiveModal: FC<ResponsiveModalProps> = ({
 	if (isDesktop) {
 		return (
 			<Dialog open={open} onOpenChange={onOpenChange}>
+				<DialogHeader>
+					<DialogTitle>
+						<VisuallyHidden.Root asChild>
+							<p>Menu</p>
+						</VisuallyHidden.Root>
+					</DialogTitle>
+				</DialogHeader>
 				<DialogContent className="w-full sm:max-w-lg p-0 border-none overflow-y-auto hide-scrollbar max-h-[85vh]">
 					{children}
 				</DialogContent>

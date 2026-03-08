@@ -7,7 +7,7 @@ import { zValidator } from '@hono/zod-validator';
 import { Hono } from 'hono';
 import { ID, Query } from 'node-appwrite';
 import z from 'zod';
-import { createTaskSchema } from '../schemas';
+import { createTaskServerSchema } from '../schemas';
 import { TaskStatus } from '../types';
 
 const app = new Hono()
@@ -116,13 +116,13 @@ const app = new Hono()
 				};
 			});
 
-			return c.json({ ...tasks, rows: populatedTasks });
+			return c.json({ data: { ...tasks, rows: populatedTasks } });
 		},
 	)
 	.post(
 		'/',
 		sessionMiddleware,
-		zValidator('json', createTaskSchema),
+		zValidator('json', createTaskServerSchema),
 		async (c) => {
 			const user = c.get('user');
 			const tablesDB = c.get('tablesDB');
@@ -178,7 +178,7 @@ const app = new Hono()
 				},
 			});
 
-			return c.json({ task });
+			return c.json({ data: task });
 		},
 	);
 
