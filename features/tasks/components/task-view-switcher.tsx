@@ -3,14 +3,35 @@
 import { DottedSeparator } from '@/components/dotted-separator';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useWorkspaceId } from '@/features/workspaces/hooks/use-workspace-id';
 import { useModalState } from '@/hooks/use-modal-state';
-import { PlusIcon } from 'lucide-react';
+import { Loader2, PlusIcon } from 'lucide-react';
+import { useQueryState } from 'nuqs';
+import { useGetTasks } from '../api/use-get-tasks';
+import { useTaskFilters } from '../hooks/use-task-filters';
+import { DataFilters } from './data-filters';
 
 export const TaskViewSwitcher = () => {
+	const [{ status, projectId, assigneeId, dueDate }] = useTaskFilters();
+	const [view, setView] = useQueryState('task-view', {
+		defaultValue: 'table',
+	});
+	const workspaceId = useWorkspaceId();
+	const { data: tasks, isLoading: isLoadingTasks } = useGetTasks({
+		workspaceId,
+		status,
+		projectId,
+		assigneeId,
+		dueDate,
+	});
 	const { open } = useModalState('create-task');
 
 	return (
-		<Tabs className="w-full flex-1 border rounded-lg" defaultValue="table">
+		<Tabs
+			className="w-full flex-1 border rounded-lg"
+			defaultValue={view}
+			onValueChange={setView}
+		>
 			<div className="h-full flex flex-col overflow-auto p-4">
 				<div className="flex items-center gap-y-2 justify-between flex-col lg:flex-row">
 					<TabsList className="w-full lg:w-auto" variant={'line'}>
@@ -31,13 +52,19 @@ export const TaskViewSwitcher = () => {
 					</Button>
 				</div>
 				<DottedSeparator className="my-4" />
-				Data Filters
+				<DataFilters />
 				<DottedSeparator className="my-4" />
-				<>
-					<TabsContent value="table">Data Table</TabsContent>
-					<TabsContent value="kanban">Data Kanban</TabsContent>
-					<TabsContent value="calendar">Data Calendar</TabsContent>
-				</>
+				{isLoadingTasks ? (
+					<div className="w-full border rounded-lg h-[200px] flex flex-col items-center justify-center">
+						<Loader2 className="size-5 animate-spin text-muted-foreground" />
+					</div>
+				) : (
+					<>
+						<TabsContent value="table">{JSON.stringify(tasks)}</TabsContent>
+						<TabsContent value="kanban">{JSON.stringify(tasks)}</TabsContent>
+						<TabsContent value="calendar">{JSON.stringify(tasks)}</TabsContent>
+					</>
+				)}
 			</div>
 		</Tabs>
 	);
