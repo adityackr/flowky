@@ -11,6 +11,35 @@ import { createTaskServerSchema } from '../schemas';
 import { Task, TaskStatus } from '../types';
 
 const app = new Hono()
+	.delete('/:taskId', sessionMiddleware, async (c) => {
+		const user = c.get('user');
+		const tablesDB = c.get('tablesDB');
+		const { taskId } = c.req.param();
+
+		const task = await tablesDB.getRow({
+			databaseId: DATABASE_ID,
+			tableId: TASKS_ID,
+			rowId: taskId,
+		});
+
+		const member = await getMember({
+			tablesDB,
+			userId: user.$id,
+			workspaceId: task.workspaceId,
+		});
+
+		if (!member) {
+			return c.json({ error: 'Unauthorized' }, 401);
+		}
+
+		await tablesDB.deleteRow({
+			databaseId: DATABASE_ID,
+			tableId: TASKS_ID,
+			rowId: taskId,
+		});
+
+		return c.json({ data: { $id: task.$id } });
+	})
 	.get(
 		'/',
 		sessionMiddleware,
@@ -126,15 +155,8 @@ const app = new Hono()
 		async (c) => {
 			const user = c.get('user');
 			const tablesDB = c.get('tablesDB');
-			const {
-				name,
-				status,
-				workspaceId,
-				projectId,
-				dueDate,
-				assigneeId,
-				description,
-			} = c.req.valid('json');
+			const { name, status, workspaceId, projectId, dueDate, assigneeId } =
+				c.req.valid('json');
 
 			const member = await getMember({
 				tablesDB,
@@ -173,13 +195,100 @@ const app = new Hono()
 					projectId,
 					dueDate,
 					assigneeId,
-					description,
 					position: newPosition,
 				},
 			});
 
 			return c.json({ data: task });
 		},
-	);
+	)
+	.patch(
+		'/:taskId',
+		sessionMiddleware,
+		zValidator('json', createTaskServerSchema.partial()),
+		async (c) => {
+			const user = c.get('user');
+			const tablesDB = c.get('tablesDB');
+			const { taskId } = c.req.param();
+			const { name, status, projectId, dueDate, assigneeId, description } =
+				c.req.valid('json');
+
+			const existingTask = await tablesDB.getRow<Task>({
+				databaseId: DATABASE_ID,
+				tableId: TASKS_ID,
+				rowId: taskId,
+			});
+
+			const member = await getMember({
+				tablesDB,
+				userId: user.$id,
+				workspaceId: existingTask.workspaceId,
+			});
+
+			if (!member) {
+				return c.json({ error: 'Unauthorized' }, 401);
+			}
+
+			const task = await tablesDB.updateRow({
+				databaseId: DATABASE_ID,
+				tableId: TASKS_ID,
+				rowId: taskId,
+				data: {
+					name,
+					status,
+					projectId,
+					dueDate,
+					assigneeId,
+					description,
+				},
+			});
+
+			return c.json({ data: task });
+		},
+	)
+	.get('/:taskId', sessionMiddleware, async (c) => {
+		const currentUser = c.get('user');
+		const tablesDB = c.get('tablesDB');
+		const { users } = await createAdminClient();
+		const { taskId } = c.req.param();
+
+		const task = await tablesDB.getRow<Task>({
+			databaseId: DATABASE_ID,
+			tableId: TASKS_ID,
+			rowId: taskId,
+		});
+
+		const currentMember = await getMember({
+			tablesDB,
+			userId: currentUser.$id,
+			workspaceId: task.workspaceId,
+		});
+
+		if (!currentMember) {
+			return c.json({ error: 'Unauthorized' }, 401);
+		}
+
+		const project = await tablesDB.getRow<Project>({
+			databaseId: DATABASE_ID,
+			tableId: PROJECTS_ID,
+			rowId: task.projectId,
+		});
+
+		const member = await tablesDB.getRow({
+			databaseId: DATABASE_ID,
+			tableId: MEMBERS_ID,
+			rowId: task.assigneeId,
+		});
+
+		const user = await users.get(member.userId);
+
+		const assignee = {
+			...member,
+			name: user.name,
+			email: user.email,
+		};
+
+		return c.json({ data: { ...task, project, assignee } });
+	});
 
 export default app;

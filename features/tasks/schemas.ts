@@ -17,4 +17,9 @@ export const createTaskServerSchema = createTaskSchema.extend({
 	dueDate: z.coerce.date(),
 });
 
+export const updateTaskSchema = createTaskSchema.partial().extend({
+	taskId: z.string().trim().min(1, 'Task ID is required'),
+});
+
+export type UpdateTaskSchema = z.infer<typeof updateTaskSchema>;
 export type CreateTaskSchema = z.infer<typeof createTaskSchema>;
