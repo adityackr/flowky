@@ -1,7 +1,8 @@
-import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { Slot } from "radix-ui"
+import * as React from "react"
 
+import { TaskStatus } from '@/features/tasks/types'
 import { cn } from "@/lib/utils"
 
 const badgeVariants = cva(
@@ -18,6 +19,11 @@ const badgeVariants = cva(
           "border-border text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
         ghost: "[a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
         link: "text-primary underline-offset-4 [a&]:hover:underline",
+        [TaskStatus.TODO]: 'border-transparent bg-red-400 text-primary hover:bg-red-400/80',
+        [TaskStatus.IN_PROGRESS]: 'border-transparent bg-yellow-400 text-primary hover:bg-yellow-400/80',
+        [TaskStatus.IN_REVIEW]: 'border-transparent bg-blue-400 text-primary hover:bg-blue-400/80',
+        [TaskStatus.DONE]: 'border-transparent bg-emerald-400 text-primary hover:bg-emerald-400/80',
+        [TaskStatus.BACKLOG]: 'border-transparent bg-gray-300 text-primary hover:bg-gray-300/80',
       },
     },
     defaultVariants: {

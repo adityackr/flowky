@@ -9,7 +9,9 @@ import { Loader2, PlusIcon } from 'lucide-react';
 import { useQueryState } from 'nuqs';
 import { useGetTasks } from '../api/use-get-tasks';
 import { useTaskFilters } from '../hooks/use-task-filters';
+import { columns } from './columns';
 import { DataFilters } from './data-filters';
+import { DataTable } from './data-table';
 
 export const TaskViewSwitcher = () => {
 	const [{ status, projectId, assigneeId, dueDate }] = useTaskFilters();
@@ -55,12 +57,14 @@ export const TaskViewSwitcher = () => {
 				<DataFilters />
 				<DottedSeparator className="my-4" />
 				{isLoadingTasks ? (
-					<div className="w-full border rounded-lg h-[200px] flex flex-col items-center justify-center">
+					<div className="w-full border rounded-lg h-50 flex flex-col items-center justify-center">
 						<Loader2 className="size-5 animate-spin text-muted-foreground" />
 					</div>
 				) : (
 					<>
-						<TabsContent value="table">{JSON.stringify(tasks)}</TabsContent>
+						<TabsContent value="table">
+							<DataTable columns={columns} data={tasks?.rows ?? []} />
+						</TabsContent>
 						<TabsContent value="kanban">{JSON.stringify(tasks)}</TabsContent>
 						<TabsContent value="calendar">{JSON.stringify(tasks)}</TabsContent>
 					</>

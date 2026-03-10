@@ -8,7 +8,7 @@ import { Hono } from 'hono';
 import { ID, Query } from 'node-appwrite';
 import z from 'zod';
 import { createTaskServerSchema } from '../schemas';
-import { TaskStatus } from '../types';
+import { Task, TaskStatus } from '../types';
 
 const app = new Hono()
 	.get(
@@ -68,7 +68,7 @@ const app = new Hono()
 				query.push(Query.search('name', search));
 			}
 
-			const tasks = await tablesDB.listRows({
+			const tasks = await tablesDB.listRows<Task>({
 				databaseId: DATABASE_ID,
 				tableId: TASKS_ID,
 				queries: query,
