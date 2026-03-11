@@ -33,12 +33,14 @@ type CreateTaskFormProps = {
 	onCancel?: () => void;
 	projectOptions: { id: string; name: string; imageUrl: string }[];
 	memberOptions: { id: string; name: string }[];
+	defaultStatus?: TaskStatus;
 };
 
 export const CreateTaskForm = ({
 	onCancel,
 	projectOptions,
 	memberOptions,
+	defaultStatus,
 }: CreateTaskFormProps) => {
 	const workspaceId = useWorkspaceId();
 	const { mutate, isPending } = useCreateTask();
@@ -47,6 +49,7 @@ export const CreateTaskForm = ({
 		resolver: zodResolver(createTaskSchema),
 		defaultValues: {
 			workspaceId,
+			...(defaultStatus ? { status: defaultStatus } : {}),
 		},
 	});
 

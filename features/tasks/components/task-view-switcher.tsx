@@ -11,6 +11,7 @@ import { useGetTasks } from '../api/use-get-tasks';
 import { useTaskFilters } from '../hooks/use-task-filters';
 import { columns } from './columns';
 import { DataFilters } from './data-filters';
+import { DataKanban } from './data-kanban';
 import { DataTable } from './data-table';
 
 export const TaskViewSwitcher = () => {
@@ -65,7 +66,9 @@ export const TaskViewSwitcher = () => {
 						<TabsContent value="table">
 							<DataTable columns={columns} data={tasks?.rows ?? []} />
 						</TabsContent>
-						<TabsContent value="kanban">{JSON.stringify(tasks)}</TabsContent>
+						<TabsContent value="kanban">
+							<DataKanban data={tasks?.rows ?? []} />
+						</TabsContent>
 						<TabsContent value="calendar">{JSON.stringify(tasks)}</TabsContent>
 					</>
 				)}
