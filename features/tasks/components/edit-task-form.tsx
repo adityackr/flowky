@@ -130,7 +130,7 @@ export const EditTaskForm = ({
 														<div className="flex items-center gap-x-2">
 															<EntityAvatar
 																className="size-6 rounded-full"
-																fallbackClassName="text-sm font-medium bg-neutral-300 text-black"
+																fallbackClassName="text-sm font-medium bg-neutral-200 text-neutral-700"
 																name={member.name}
 															/>
 															<p>{member.name}</p>

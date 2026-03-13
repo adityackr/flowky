@@ -79,7 +79,7 @@ export const columns: ColumnDef<Task>[] = [
 				<div className="flex items-center gap-x-2 text-sm font-medium">
 					<EntityAvatar
 						className="size-6 rounded-full"
-						fallbackClassName="bg-neutral-300 text-black rounded-full text-xs font-medium"
+						fallbackClassName="bg-neutral-200 text-neutral-700 rounded-full text-xs font-medium"
 						name={assignee?.name ?? 'Unknown Assignee'}
 					/>
 					<p className="line-clamp-1">{assignee?.name}</p>

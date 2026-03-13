@@ -24,7 +24,7 @@ export const KanbanCard = ({ task }: KanbanCardProps) => {
 				<EntityAvatar
 					name={task.assignee?.name || 'Unassigned'}
 					className="size-6 rounded-full"
-					fallbackClassName="bg-neutral-300 text-black text-xs font-medium"
+					fallbackClassName="bg-neutral-200 text-neutral-700 text-xs font-medium"
 				/>
 				<div className="size-1 rounded-full bg-neutral-300" />
 				<TaskDate value={task.dueDate} className="text-xs" />
