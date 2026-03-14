@@ -50,7 +50,7 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
 					</Button>
 				</div>
 			</div>
-			<TaskViewSwitcher />
+			<TaskViewSwitcher hideProjectFilter />
 		</div>
 	);
 };
