@@ -17,6 +17,7 @@ import { DataCalendar } from './data-calendar';
 import { DataFilters } from './data-filters';
 import { DataKanban } from './data-kanban';
 import { DataTable } from './data-table';
+import { useProjectId } from '@/features/projects/hooks/use-project-id';
 
 interface TaskViewSwitcherProps {
 	hideProjectFilter?: boolean;
@@ -25,6 +26,7 @@ interface TaskViewSwitcherProps {
 export const TaskViewSwitcher = ({
 	hideProjectFilter,
 }: TaskViewSwitcherProps) => {
+	const projectIdFromParams = useProjectId();
 	const [{ status, projectId, assigneeId, dueDate }] = useTaskFilters();
 	const [view, setView] = useQueryState('task-view', {
 		defaultValue: 'table',
@@ -33,7 +35,7 @@ export const TaskViewSwitcher = ({
 	const { data: tasks, isLoading: isLoadingTasks } = useGetTasks({
 		workspaceId,
 		status,
-		projectId,
+		projectId: projectIdFromParams || projectId,
 		assigneeId,
 		dueDate,
 	});

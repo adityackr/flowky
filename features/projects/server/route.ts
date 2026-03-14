@@ -57,6 +57,30 @@ const app = new Hono()
 			});
 		},
 	)
+	.get('/:projectId', sessionMiddleware, async (c) => {
+		const tablesDB = c.get('tablesDB');
+		const user = c.get('user');
+
+		const { projectId } = c.req.param();
+
+		const project = await tablesDB.getRow<Project>({
+			databaseId: DATABASE_ID,
+			tableId: PROJECTS_ID,
+			rowId: projectId,
+		});
+
+		const member = await getMember({
+			tablesDB,
+			userId: user.$id,
+			workspaceId: project.workspaceId,
+		});
+
+		if (!member) {
+			return c.json({ error: 'Unauthorized' }, 401);
+		}
+
+		return c.json({ data: project });
+	})
 	.post(
 		'/',
 		sessionMiddleware,

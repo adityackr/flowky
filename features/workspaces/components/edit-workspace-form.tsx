@@ -92,17 +92,7 @@ export const EditWorkspaceForm: FC<EditWorkspaceFormProps> = ({
 			image: data.image instanceof File ? data.image : (data.image ?? ''),
 		};
 
-		mutate(
-			{ form: finalData, param: { workspaceId: initialValues.$id } },
-			{
-				onSuccess: ({ data }) => {
-					form.reset({
-						...data,
-						image: data.imageUrl ?? '',
-					});
-				},
-			},
-		);
+		mutate({ form: finalData, param: { workspaceId: initialValues.$id } });
 	};
 
 	const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {

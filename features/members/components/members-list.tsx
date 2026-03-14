@@ -45,14 +45,7 @@ export const MembersList = () => {
 	const handleDeleteMember = async (memberId: string) => {
 		const ok = await confirm();
 		if (!ok) return;
-		deleteMember(
-			{ param: { memberId } },
-			{
-				onSuccess: () => {
-					router.refresh();
-				},
-			},
-		);
+		deleteMember({ param: { memberId } });
 	};
 
 	if (members?.rows.length === 0) {
