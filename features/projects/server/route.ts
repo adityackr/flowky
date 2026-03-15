@@ -50,7 +50,7 @@ const app = new Hono()
 				);
 			}
 
-			const projects = await tablesDB.listRows({
+			const projects = await tablesDB.listRows<Project>({
 				databaseId: DATABASE_ID,
 				tableId: PROJECTS_ID,
 				queries: [

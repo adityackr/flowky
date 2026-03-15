@@ -5,7 +5,7 @@ import { zValidator } from '@hono/zod-validator';
 import { Hono } from 'hono';
 import { Query } from 'node-appwrite';
 import z from 'zod';
-import { MemberRole } from '../types';
+import { Member, MemberRole } from '../types';
 import { getMember } from '../utils';
 
 const app = new Hono()
@@ -34,7 +34,7 @@ const app = new Hono()
 				);
 			}
 
-			const members = await tablesDB.listRows({
+			const members = await tablesDB.listRows<Member>({
 				databaseId: DATABASE_ID,
 				tableId: MEMBERS_ID,
 				queries: [Query.equal('workspaceId', workspaceId)],
