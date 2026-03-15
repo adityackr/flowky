@@ -1,10 +1,12 @@
 'use client';
 
+import { Analytics } from '@/components/analytics';
 import { EntityAvatar } from '@/components/entity-avatar';
 import { PageError } from '@/components/page-error';
 import { PageLoader } from '@/components/page-loader';
 import { Button } from '@/components/ui/button';
 import { useGetProject } from '@/features/projects/api/use-get-project';
+import { useGetProjectAnalytics } from '@/features/projects/api/use-get-project-analytics';
 import { useProjectId } from '@/features/projects/hooks/use-project-id';
 import { TaskViewSwitcher } from '@/features/tasks/components/task-view-switcher';
 import { PencilIcon } from 'lucide-react';
@@ -14,12 +16,14 @@ export const ProjectPageClient = () => {
 	const projectId = useProjectId();
 
 	const { data: project, isLoading } = useGetProject({ projectId });
+	const { data: analytics, isLoading: isAnalyticsLoading } =
+		useGetProjectAnalytics({ projectId });
 
-	if (isLoading) {
+	if (isLoading || isAnalyticsLoading) {
 		return <PageLoader />;
 	}
 
-	if (!project) {
+	if (!project || !analytics) {
 		return <PageError message="Project not found" />;
 	}
 
@@ -46,6 +50,7 @@ export const ProjectPageClient = () => {
 					</Button>
 				</div>
 			</div>
+			{analytics ? <Analytics data={analytics} /> : null}
 			<TaskViewSwitcher hideProjectFilter />
 		</div>
 	);

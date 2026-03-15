@@ -25,7 +25,7 @@ export const DottedSeparator: FC<DottedSeparatorProps> = ({
 			className={cn(
 				isHorizontal
 					? 'w-full flex items-center'
-					: 'hh-full flex flex-col items-center',
+					: 'h-full flex flex-col items-center',
 				className,
 			)}
 		>
