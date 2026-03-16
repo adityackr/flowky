@@ -19,7 +19,7 @@ export const HomeMembersList = ({ members, total }: HomeMembersListProps) => {
 		<div className="flex flex-col gap-y-4 col-span-1">
 			<div className="bg-white border rounded-lg p-4">
 				<div className="flex items-center justify-between">
-					<p className="text-lg font-semibold">Projects ({total})</p>
+					<p className="text-lg font-semibold">Members ({total})</p>
 					<Button variant={'secondary'} size={'icon'} asChild>
 						<Link href={`/workspaces/${workspaceId}/members`}>
 							<SettingsIcon className="size-4 text-neutral-500" />
