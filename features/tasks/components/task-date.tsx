@@ -1,10 +1,10 @@
 import { cn } from '@/lib/utils';
 import { differenceInDays, format } from 'date-fns';
 
-type TaskDateProps = {
+interface TaskDateProps {
 	value: string;
 	className?: string;
-};
+}
 
 export const TaskDate = ({ value, className }: TaskDateProps) => {
 	const today = new Date();

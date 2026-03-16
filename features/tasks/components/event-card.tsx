@@ -5,13 +5,13 @@ import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import { Assignee, TaskStatus } from '../types';
 
-type EventCardProps = {
+interface EventCardProps {
 	id: string;
 	title: string;
 	project: Project;
 	assignee: Assignee;
 	status: TaskStatus;
-};
+}
 
 const statusColorMap: Record<TaskStatus, string> = {
 	[TaskStatus.BACKLOG]: 'border-l-pink-500',

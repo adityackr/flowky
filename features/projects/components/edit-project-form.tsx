@@ -25,22 +25,22 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowLeftIcon, ImageIcon } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { ChangeEvent, FC, useRef } from 'react';
+import { ChangeEvent, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDeleteProject } from '../api/use-delete-project';
 import { useUpdateProject } from '../api/use-update-project';
 import { updateProjectSchema, type UpdateProjectSchema } from '../schemas';
 import type { Project } from '../types';
 
-type EditProjectFormProps = {
+interface EditProjectFormProps {
 	onCancel?: () => void;
 	initialValues: Project;
-};
+}
 
-export const EditProjectForm: FC<EditProjectFormProps> = ({
+export const EditProjectForm = ({
 	onCancel,
 	initialValues,
-}) => {
+}: EditProjectFormProps) => {
 	const router = useRouter();
 	const { mutate, isPending } = useUpdateProject();
 	const { mutate: deleteProject, isPending: isProjectDeleting } =

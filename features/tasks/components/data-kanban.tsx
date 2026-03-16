@@ -21,12 +21,12 @@ type TasksState = {
 	[key in TaskStatus]: Task[];
 };
 
-type DataKanbanProps = {
+interface DataKanbanProps {
 	data: Task[];
 	onChange: (
 		tasks: { $id: string; status: TaskStatus; position: number }[],
 	) => void;
-};
+}
 
 export const DataKanban = ({ data, onChange }: DataKanbanProps) => {
 	const [tasks, setTasks] = useState<TasksState>(() => {

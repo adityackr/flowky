@@ -1,14 +1,13 @@
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
-import { FC } from 'react';
 
-type MemberAvatarProps = {
+interface MemberAvatarProps {
 	name: string;
 	className?: string;
 	fallbackClassName?: string;
-};
+}
 
-export const MemberAvatar: FC<MemberAvatarProps> = ({
+export const MemberAvatar = ({
 	name,
 	className,
 	fallbackClassName,

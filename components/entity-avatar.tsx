@@ -1,21 +1,20 @@
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
-import { FC } from 'react';
 
-type EntityAvatarProps = {
+interface EntityAvatarProps {
 	image?: string;
 	name: string;
 	className?: string;
 	fallbackClassName?: string;
-};
+}
 
-export const EntityAvatar: FC<EntityAvatarProps> = ({
+export const EntityAvatar = ({
 	image,
 	name,
 	className,
 	fallbackClassName,
-}) => {
+}: EntityAvatarProps) => {
 	if (image) {
 		return (
 			<div

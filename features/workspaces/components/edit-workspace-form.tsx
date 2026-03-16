@@ -25,7 +25,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowLeftIcon, CopyIcon, ImageIcon } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { ChangeEvent, FC, useRef } from 'react';
+import { ChangeEvent, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { useDeleteWorkspace } from '../api/use-delete-workspace';
@@ -34,15 +34,15 @@ import { useResetInviteCode } from '../api/use-reset-invite-code';
 import { editWorkspaceSchema, EditWorkspaceSchema } from '../schemas';
 import type { Workspace } from '../types';
 
-type EditWorkspaceFormProps = {
+interface EditWorkspaceFormProps {
 	onCancel?: () => void;
 	initialValues: Workspace;
-};
+}
 
-export const EditWorkspaceForm: FC<EditWorkspaceFormProps> = ({
+export const EditWorkspaceForm = ({
 	onCancel,
 	initialValues,
-}) => {
+}: EditWorkspaceFormProps) => {
 	const router = useRouter();
 	const { mutate, isPending } = useEditWorkspace();
 	const { mutate: deleteWorkspace, isPending: isWorkspaceDeleting } =

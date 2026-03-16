@@ -1,3 +1,4 @@
+import { Project } from '@/features/projects/types';
 import {
 	addMonths,
 	format,
@@ -10,11 +11,10 @@ import { enUS } from 'date-fns/locale';
 import { useState } from 'react';
 import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import './data-calendar.css';
 import { Assignee, Task } from '../types';
-import { EventCard } from './event-card';
-import { Project } from '@/features/projects/types';
 import { CustomToolbar } from './custom-toolbar';
+import './data-calendar.css';
+import { EventCard } from './event-card';
 
 const locales = {
 	'en-US': enUS,
@@ -28,9 +28,9 @@ const localizer = dateFnsLocalizer({
 	locales,
 });
 
-type DataCalendarProps = {
+interface DataCalendarProps {
 	data: Task[];
-};
+}
 
 export const DataCalendar = ({ data }: DataCalendarProps) => {
 	const [value, setValue] = useState(
@@ -75,7 +75,7 @@ export const DataCalendar = ({ data }: DataCalendarProps) => {
 						: format(date, 'EEE'),
 			}}
 			components={{
-				eventWrapper: ({event}) => (
+				eventWrapper: ({ event }) => (
 					<EventCard
 						id={event.id}
 						title={event.title}
@@ -86,7 +86,7 @@ export const DataCalendar = ({ data }: DataCalendarProps) => {
 				),
 				toolbar: () => (
 					<CustomToolbar date={value} onNavigate={handleNavigate} />
-				)
+				),
 			}}
 		/>
 	);

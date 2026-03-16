@@ -8,10 +8,10 @@ import { Loader2 } from 'lucide-react';
 import { TaskStatus } from '../types';
 import { CreateTaskForm } from './create-task-form';
 
-type CreateTaskFormWrapperProps = {
+interface CreateTaskFormWrapperProps {
 	onCancel: () => void;
 	defaultStatus?: TaskStatus;
-};
+}
 
 export const CreateTaskFormWrapper = ({
 	onCancel,

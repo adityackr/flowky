@@ -14,9 +14,9 @@ import { FolderIcon, ListChecksIcon, UserIcon } from 'lucide-react';
 import { useTaskFilters } from '../hooks/use-task-filters';
 import { TaskStatus } from '../types';
 
-type DataFiltersProps = {
+interface DataFiltersProps {
 	hideProjectFilter?: boolean;
-};
+}
 
 export const DataFilters = ({ hideProjectFilter }: DataFiltersProps) => {
 	const workspaceId = useWorkspaceId();

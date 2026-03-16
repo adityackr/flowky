@@ -8,10 +8,10 @@ import { Loader2 } from 'lucide-react';
 import { useGetTask } from '../api/use-get-task';
 import { EditTaskForm } from './edit-task-form';
 
-type EditTaskFormWrapperProps = {
+interface EditTaskFormWrapperProps {
 	onCancel: () => void;
 	id: string;
-};
+}
 
 export const EditTaskFormWrapper = ({
 	onCancel,

@@ -1,20 +1,20 @@
 import { VisuallyHidden } from 'radix-ui';
-import { FC, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { useMedia } from 'react-use';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
 import { Drawer, DrawerContent } from './ui/drawer';
 
-type ResponsiveModalProps = {
+interface ResponsiveModalProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
 	children: ReactNode;
-};
+}
 
-export const ResponsiveModal: FC<ResponsiveModalProps> = ({
+export const ResponsiveModal = ({
 	open,
 	onOpenChange,
 	children,
-}) => {
+}: ResponsiveModalProps) => {
 	const isDesktop = useMedia('(min-width: 1024px)', true);
 
 	if (isDesktop) {

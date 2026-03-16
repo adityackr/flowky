@@ -15,11 +15,11 @@ import { useJoinWorkspace } from '../api/use-join-workspace';
 import { useInviteCode } from '../hooks/use-invite-code';
 import { useWorkspaceId } from '../hooks/use-workspace-id';
 
-type JoinWorkspaceFormProps = {
+interface JoinWorkspaceFormProps {
 	initialValues: {
 		name: string;
 	};
-};
+}
 
 export const JoinWorkspaceForm = ({
 	initialValues,

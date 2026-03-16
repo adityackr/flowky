@@ -5,9 +5,9 @@ import { Task } from '../types';
 import { TaskActions } from './task-actions';
 import { TaskDate } from './task-date';
 
-type KanbanCardProps = {
+interface KanbanCardProps {
 	task: Task;
-};
+}
 
 export const KanbanCard = ({ task }: KanbanCardProps) => {
 	return (

@@ -12,11 +12,11 @@ import { ReactNode } from 'react';
 import { useDeleteTask } from '../api/use-delete-task';
 import { useEditTaskModal } from '../hooks/use-edit-task-modal';
 
-type TaskActionsProps = {
+interface TaskActionsProps {
 	id: string;
 	projectId: string;
 	children: ReactNode;
-};
+}
 
 export const TaskActions = ({ id, projectId, children }: TaskActionsProps) => {
 	const workspaceId = useWorkspaceId();

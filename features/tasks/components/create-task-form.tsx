@@ -29,12 +29,12 @@ import { useCreateTask } from '../api/use-create-task';
 import { createTaskSchema, type CreateTaskSchema } from '../schemas';
 import { TaskStatus } from '../types';
 
-type CreateTaskFormProps = {
+interface CreateTaskFormProps {
 	onCancel?: () => void;
 	projectOptions: { id: string; name: string; imageUrl: string }[];
 	memberOptions: { id: string; name: string }[];
 	defaultStatus?: TaskStatus;
-};
+}
 
 export const CreateTaskForm = ({
 	onCancel,

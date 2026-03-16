@@ -18,16 +18,16 @@ import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ImageIcon } from 'lucide-react';
 import Image from 'next/image';
-import { ChangeEvent, FC, useRef } from 'react';
+import { ChangeEvent, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useCreateProject } from '../api/use-create-project';
 import { CreateProjectSchema, createProjectSchema } from '../schemas';
 
-type CreateProjectFormProps = {
+interface CreateProjectFormProps {
 	onCancel?: () => void;
-};
+}
 
-export const CreateProjectForm: FC<CreateProjectFormProps> = ({ onCancel }) => {
+export const CreateProjectForm = ({ onCancel }: CreateProjectFormProps) => {
 	const workspaceId = useWorkspaceId();
 	const { mutate, isPending } = useCreateProject();
 

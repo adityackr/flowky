@@ -28,12 +28,12 @@ import { useUpdateTask } from '../api/use-update-task';
 import { createTaskSchema, type CreateTaskSchema } from '../schemas';
 import { Task, TaskStatus } from '../types';
 
-type EditTaskFormProps = {
+interface EditTaskFormProps {
 	onCancel?: () => void;
 	projectOptions: { id: string; name: string; imageUrl: string }[];
 	memberOptions: { id: string; name: string }[];
 	initialValues: Task;
-};
+}
 
 export const EditTaskForm = ({
 	onCancel,
