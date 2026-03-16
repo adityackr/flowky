@@ -61,7 +61,7 @@ Ensure you have the following installed on your machine:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/flowky.git
+git clone https://github.com/adityackr/flowky
 cd flowky
 ```
 
